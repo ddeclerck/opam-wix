@@ -34,6 +34,10 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
 
+      # Install these packages early to avoid unexplainable CI failure
+      - if: ${{ matrix.os == 'windows-latest' }}
+        run: opam install conf-mingw-w64-gcc-i686 conf-mingw-w64-gcc-x86_64 conf-mingw-w64-g++-i686 conf-mingw-w64-g++-x86_64 mingw-w64-shims
+
       - run: opam install . --deps-only -t
       - run: opam exec -- dune build @install
       - run: opam exec -- dune runtest
